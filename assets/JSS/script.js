@@ -1,44 +1,72 @@
 //Current date & time display at the header
-var today = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+var today = moment().format("dddd, MMMM Do YYYY");
 $("#currentDay").text(today);
 
-// <!-- Timeblocks criteria:  -->
-//       <!-- standart time -->
-//       <!-- each block are color coded by past, present & future -->
-//         <!-- time is attach to the colors -->
-//       <!-- click each block to enter an event:-->
-//       <!-- ecah event must be saved on the local storage -->
-//       <!-- when refresh the page the event stays on the calendar -->
+//variables need it
+// var saveBtn = $("#saveBtn");
+// var areaText = $(".form-control");
+// var timeHour = $(".input-group-text");
 
+// var hour = hours[i];
+var containerEl = $(".container");
+// var hours = [
+//   "09:00AM",
+//   "10:00AM",
+//   "11:00AM",
+//   "12:00PM",
+//   "01:00PM",
+//   "02:00PM",
+//   "03:00PM",
+//   "04:00PM",
+//   "05:00PM",
+// ];
 
-// Thsi is the container for the time blocks 
-const containerEl = $(".container");
+var hours = ["09", "10", "11", "12", "13", "14", "15", "16", "17"];
 
-var hours = ["09", "10", "11", "12", "01", "02", "03", "04", "05"];
+//This for loop creates a block for each hr
+// const containerEl = $(".container");
 
-//This for loop creates a block for each hr 
 for (let i = 0; i < hours.length; i++) {
-  var rowDiv = document.createElement("div")  
-  rowDiv.innerHTML=
-  //These divs display the hour, text input area and saved btn,for each hour
-  `<div class='input-group input-group-lg'>
+  var rowDiv = document.createElement("div");
+  rowDiv.innerHTML =
+    //These divs display the hour, text input area and saved btn,for each hour
+    `<div class='input-group input-group-md'>
     <div class='input-group-prepend'>
     <span class='input-group-text'id='inputGroup-sizing-small'>${hours[i]}:00</span>
   </div>
-    <textarea id='${hours[i]}' data-hour= ${hours[i]} type='text' class='form-control'
-    placeholder='Important Events' aria-label='hourly agenda' aria-describedby='basic-addon2'></textarea>
+    <textarea id='${hours[i]}' data-hour= ${hours[i]} type='text' class='form-control textArea'
+    placeholder='Important Event' aria-label='hourly agenda' aria-describedby='basic-addon2'></textarea>
   <div class ='input-group-append btnSaved'>
-    <button data-hour=${hours[i]} class='btn btn-outline-secondary' id="savedBtn" type='saved'><img src='./assets/img/saved-icon.png'
+    <button id="saveBtn" data-hour=${hours[i]} class='btn btn-outline-secondary' type='button'><img src='./assets/img/saved-icon-1.png'
         alt='saved icon for the saved button'></button>
-        
  </div>  
-</div>`
-containerEl.append(rowDiv)
+</div>`;
+  containerEl.append(rowDiv);
+
+  // This function allows the storage of the event for each hr
+  // by clicking the save btn of each hr block
+  $("button").each(function () {
+    $(this).on("click", function (event) {
+      event.preventDefault();
+      console.log("I was click");
+      var parentDiv = $(this).parent();
+      var textEvent = $(parentDiv).siblings(".form-control").val();
+      var hour = $(this).attr("data-hour");
+      //Saves events data to localStorage
+      localStorage.setItem(hour, JSON.stringify(textEvent));
+      //Displays the text
+      // $(parentDiv).siblings(".form-control").val(localStorage.getItem(hour));
+    });
+  });
+
 }
 
-
-// $( "#btn" ).click(function() {
-    //local storage
-//   });
-
-
+// $("textarea").each(function(currentHour){
+//  var currentHour = moment().format("HH");
+//  //Past time block = blue
+//  if (parseInt(hours[i]) < currentHour) {
+//    $("text" + hours[i]).attr({
+//      "class": "past",
+//    });
+//  }
+// });
